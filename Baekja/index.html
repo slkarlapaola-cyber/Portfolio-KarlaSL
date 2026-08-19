@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>백자 · Baekja</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Song+Myung&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;500;600&display=swap');
+
+  :root{
+    --neutral:#3A2E26;
+    --cream:#F6F1E6;
+    --paper:#FBF8F2;
+    --rice1:#F4EEE2; --rice2:#E9E0CE;
+    --tea1:#9CA97C; --tea2:#6E7A52;
+    --art1:#B69C87; --art2:#8C6E58;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Karla',sans-serif;background:var(--paper);color:var(--neutral);overflow-x:hidden;}
+  h1,h2,h3{font-family:'PT Serif',serif;font-weight:400;color:var(--neutral);line-height:1.15;}
+  .hangul{font-family:'Song Myung',serif;}
+  a{text-decoration:none;color:inherit;}
+  img{display:block;max-width:100%;}
+  .container{max-width:1180px;margin:0 auto;padding:0 40px;}
+  section{padding:100px 0;}
+  button{font-family:'Karla',sans-serif;cursor:pointer;}
+
+  /* NAV */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(251,248,242,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(58,46,38,0.08);
+  }
+  .nav-inner{max-width:1180px;margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .nav-logo{display:flex;align-items:baseline;gap:8px;}
+  .nav-logo .hangul{font-size:22px;}
+  .nav-logo span.word{font-family:'PT Serif',serif;font-size:13px;letter-spacing:3px;}
+  .nav-links{display:flex;gap:34px;font-size:13.5px;}
+  .nav-links a{opacity:0.8;transition:opacity 0.2s;}
+  .nav-links a:hover{opacity:1;}
+  .hamburger{display:none;background:none;border:none;flex-direction:column;gap:5px;padding:4px;}
+  .hamburger span{width:22px;height:1.5px;background:var(--neutral);display:block;}
+  .nav-links-mobile{
+    display:none;flex-direction:column;gap:0;
+    background:var(--paper);border-top:1px solid rgba(58,46,38,0.08);
+  }
+  .nav-links-mobile.open{display:flex;}
+  .nav-links-mobile a{padding:16px 40px;font-size:14px;border-bottom:1px solid rgba(58,46,38,0.06);}
+  .nav-right{display:flex;align-items:center;gap:22px;}
+  .cart-btn{position:relative;background:none;border:none;display:flex;align-items:center;}
+  .cart-btn svg{width:20px;height:20px;stroke:var(--neutral);}
+  .cart-count{
+    position:absolute;top:-8px;right:-9px;
+    background:var(--art2);color:var(--cream);
+    font-size:10px;width:16px;height:16px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Karla',sans-serif;font-weight:600;
+  }
+
+  /* HERO */
+  .hero{padding:0;position:relative;min-height:92vh;display:flex;align-items:flex-end;overflow:hidden;}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 12%;}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg, rgba(58,46,38,0.55) 0%, rgba(58,46,38,0.05) 50%, rgba(58,46,38,0.15) 100%);}
+  .hero-content{position:relative;z-index:2;padding:0 40px 70px;max-width:640px;}
+  .hero-content .kicker{color:var(--cream);font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:0.9;margin-bottom:14px;display:block;}
+  .hero-content h1{color:var(--cream);font-size:52px;font-style:italic;margin-bottom:18px;}
+  .hero-content p{color:var(--cream);font-size:15.5px;max-width:420px;opacity:0.92;margin-bottom:28px;}
+  .btn-primary{
+    display:inline-block;background:var(--cream);color:var(--neutral);
+    padding:14px 30px;border-radius:30px;font-size:13px;letter-spacing:0.5px;
+    border:none;font-weight:600;
+  }
+
+  /* VALUE PROPS */
+  .props{background:var(--paper);padding:60px 0;}
+  .props-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .prop{text-align:center;padding:20px;}
+  .prop svg{width:26px;height:26px;stroke:var(--art2);margin:0 auto 14px;}
+  .prop h4{font-family:'Karla',sans-serif;font-weight:600;font-size:13.5px;margin-bottom:6px;}
+  .prop p{font-size:12px;color:var(--neutral);opacity:0.65;line-height:1.5;}
+
+  /* SHOP */
+  .shop{background:var(--cream);}
+  .shop-head{text-align:center;max-width:560px;margin:0 auto 50px;}
+  .shop-head .kicker{font-family:'PT Serif',serif;font-style:italic;color:var(--art2);font-size:15px;margin-bottom:10px;display:block;}
+  .shop-head h2{font-size:32px;}
+
+  .tabs{display:flex;justify-content:center;gap:10px;margin-bottom:50px;flex-wrap:wrap;}
+  .tab-btn{
+    background:none;border:1px solid rgba(58,46,38,0.2);
+    padding:10px 22px;border-radius:30px;font-size:13px;color:var(--neutral);
+    transition:all 0.25s ease;
+  }
+  .tab-btn.active{background:var(--neutral);color:var(--cream);border-color:var(--neutral);}
+
+  .product-grid{display:none;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .product-grid.active{display:grid;}
+  .product-card{background:var(--paper);border-radius:6px;overflow:hidden;transition:transform 0.35s ease, box-shadow 0.35s ease;}
+  .product-card:hover{transform:translateY(-4px);box-shadow:0 24px 40px -20px rgba(58,46,38,0.25);}
+  .product-card .img-wrap{aspect-ratio:3/4;overflow:hidden;}
+  .product-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
+  .product-card:hover img{transform:scale(1.04);}
+  .product-info{padding:20px 20px 24px;}
+  .product-info h4{font-family:'PT Serif',serif;font-size:17px;margin-bottom:4px;}
+  .product-info .desc{font-size:12px;color:var(--neutral);opacity:0.6;margin-bottom:14px;}
+  .product-info .row{display:flex;align-items:center;justify-content:space-between;}
+  .price{font-family:'Karla',sans-serif;font-weight:600;font-size:14px;}
+  .add-btn{
+    background:var(--neutral);color:var(--cream);border:none;
+    padding:9px 16px;border-radius:30px;font-size:11.5px;letter-spacing:0.4px;
+    transition:background 0.2s ease;
+  }
+  .add-btn:hover{background:var(--art2);}
+  .add-btn.added{background:var(--tea2);}
+
+  /* INGREDIENT STORY */
+  .story{background:var(--paper);}
+  .story-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:center;}
+  .story h2{font-size:30px;margin-bottom:20px;max-width:420px;}
+  .story > div > p{font-size:15px;line-height:1.8;opacity:0.75;max-width:440px;margin-bottom:56px;}
+  .ing-list{display:flex;flex-direction:column;gap:22px;}
+  .ing-item{display:flex;gap:18px;align-items:flex-start;}
+  .ing-dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+  .ing-item h4{font-family:'Karla',sans-serif;font-weight:600;font-size:14px;margin-bottom:4px;}
+  .ing-item p{font-size:13px;opacity:0.65;line-height:1.6;}
+  .story-img{border-radius:6px;overflow:hidden;}
+  .story-img img{width:100%;}
+
+  /* TEXTURE BANNER */
+  .texture-banner{padding:0;position:relative;height:70vh;overflow:hidden;}
+  .texture-banner img{width:100%;height:100%;object-fit:cover;object-position:center 30%;}
+  .texture-banner .caption{
+    position:absolute;bottom:40px;left:40px;color:var(--cream);
+    font-family:'PT Serif',serif;font-style:italic;font-size:24px;
+    max-width:340px;text-shadow:0 2px 20px rgba(0,0,0,0.3);
+  }
+
+  /* COMMUNITY */
+  .community{background:var(--cream);}
+  .community-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:34px;}
+  .community-head h3{font-family:'Karla',sans-serif;font-weight:600;font-size:15px;}
+  .community-head span{font-size:12px;opacity:0.6;}
+  .community-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .community-grid .img-wrap{aspect-ratio:1/1;border-radius:6px;overflow:hidden;}
+  .community-grid img{width:100%;height:100%;object-fit:cover;}
+
+  /* NEWSLETTER CTA */
+  .cta{
+    background-image:url('https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/patron-fondo.jpg');
+    background-size:cover;background-position:center;
+    color:var(--neutral);text-align:center;
+  }
+  .cta h2{color:var(--neutral);font-size:30px;margin-bottom:14px;font-style:italic;}
+  .cta p{color:var(--neutral);font-size:14.5px;opacity:0.85;max-width:400px;margin:0 auto 30px;}
+  .cta-form{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .cta-form input{padding:13px 18px;border-radius:30px;border:none;width:270px;font-size:13.5px;font-family:'Karla',sans-serif;}
+  .cta-form button{background:var(--neutral);color:var(--cream);border:none;padding:13px 26px;border-radius:30px;font-size:12.5px;letter-spacing:0.4px;font-weight:600;}
+
+  footer{background:var(--paper);padding:50px 0 26px;text-align:center;}
+  footer .hangul{font-size:24px;}
+  footer p{font-size:11px;opacity:0.5;margin-top:14px;}
+
+  /* CART DRAWER */
+  .overlay{position:fixed;inset:0;background:rgba(58,46,38,0.4);opacity:0;pointer-events:none;transition:opacity 0.3s ease;z-index:90;}
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .drawer{
+    position:fixed;top:0;right:-420px;width:400px;max-width:90vw;height:100%;
+    background:var(--paper);z-index:100;transition:right 0.4s cubic-bezier(.2,.8,.2,1);
+    display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,0.15);
+  }
+  .drawer.open{right:0;}
+  .drawer-head{padding:26px 26px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(58,46,38,0.1);}
+  .drawer-head h3{font-family:'PT Serif',serif;font-size:19px;}
+  .drawer-close{background:none;border:none;font-size:20px;color:var(--neutral);}
+  .drawer-items{flex:1;overflow-y:auto;padding:20px 26px;display:flex;flex-direction:column;gap:18px;}
+  .drawer-empty{text-align:center;opacity:0.5;font-size:13px;margin-top:40px;}
+  .cart-item{display:flex;gap:14px;align-items:center;}
+  .cart-item img{width:60px;height:70px;object-fit:cover;border-radius:4px;}
+  .cart-item-info{flex:1;}
+  .cart-item-info h5{font-family:'Karla',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px;}
+  .cart-item-info .line{font-size:11px;opacity:0.55;margin-bottom:6px;}
+  .qty-controls{display:flex;align-items:center;gap:10px;}
+  .qty-controls button{background:var(--cream);border:none;width:22px;height:22px;border-radius:50%;font-size:13px;}
+  .cart-item-price{font-size:12.5px;font-weight:600;}
+  .remove-btn{background:none;border:none;font-size:11px;opacity:0.5;text-decoration:underline;margin-top:4px;}
+  .drawer-foot{padding:22px 26px 30px;border-top:1px solid rgba(58,46,38,0.1);}
+  .drawer-foot .subtotal{display:flex;justify-content:space-between;font-size:14px;margin-bottom:16px;font-weight:600;}
+  .checkout-btn{width:100%;background:var(--neutral);color:var(--cream);border:none;padding:15px;border-radius:2px;font-size:13px;letter-spacing:0.5px;font-weight:600;}
+
+  @media (max-width: 900px){
+    .props-grid{grid-template-columns:1fr 1fr;}
+    .product-grid.active{grid-template-columns:1fr 1fr;}
+    .story-grid{grid-template-columns:1fr;gap:40px;}
+    .community-grid{grid-template-columns:1fr 1fr;}
+    .nav-links{display:none;}
+    .hamburger{display:flex;}
+    .hero-content h1{font-size:36px;}
+    .nav-inner{padding:16px 20px;}
+    section{padding:70px 0;}
+    .container{padding:0 20px;}
+  }
+  @media (max-width: 480px){
+    .product-grid.active{grid-template-columns:1fr;}
+    .community-grid{grid-template-columns:1fr 1fr;}
+    .hero-content h1{font-size:30px;}
+    .hero-content p{font-size:14px;}
+    .cta-form input{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="hangul">백자</span><span class="word">BAEKJA</span></div>
+    <div class="nav-links">
+      <a href="#tienda">Tienda</a>
+      <a href="#historia">Ingredientes</a>
+      <a href="#comunidad">Comunidad</a>
+    </div>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="openCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L4 3H2"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="nav-links-mobile" id="mobileNav">
+    <a href="#tienda" onclick="closeMobileNav()">Tienda</a>
+    <a href="#historia" onclick="closeMobileNav()">Ingredientes</a>
+    <a href="#comunidad" onclick="closeMobileNav()">Comunidad</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="Bekja/Modelo1" alt="Baekja">
+  <div class="hero-content">
+    <span class="kicker">Cuidado de la piel, en tres gestos</span>
+    <h1>Pureza sin ruido.</h1>
+    <p>Limpiador, sérum y gel hidratante. Cada uno construido alrededor de un solo ingrediente natural — arroz, té verde, artemisa.</p>
+    <a href="#tienda" class="btn-primary">Explorar la tienda</a>
+  </div>
+</section>
+
+<!-- VALUE PROPS -->
+<section class="props">
+  <div class="container props-grid">
+    <div class="prop">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 2C8 6 5 9 5 13a7 7 0 0014 0c0-4-3-7-7-11z"/></svg>
+      <h4>Un solo ingrediente</h4>
+      <p>Cada producto gira en torno a una sola planta natural.</p>
+    </div>
+    <div class="prop">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M6 4v9a6 6 0 0012 0V4"/><path d="M4 4h16"/></svg>
+      <h4>Vidrio templado</h4>
+      <p>Envases duraderos, pensados para reutilizarse.</p>
+    </div>
+    <div class="prop">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0112 6a5.5 5.5 0 019.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+      <h4>Rutina mínima</h4>
+      <p>Tres pasos, no diez. Lo justo, bien hecho.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="shop" id="tienda">
+  <div class="container">
+    <div class="shop-head">
+      <span class="kicker">Tienda</span>
+      <h2>Elige tu línea</h2>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('arroz', this)">Arroz</button>
+      <button class="tab-btn" onclick="showTab('te', this)">Té verde</button>
+      <button class="tab-btn" onclick="showTab('art', this)">Artemisa</button>
+    </div>
+
+    <div class="product-grid active" id="grid-arroz">
+      <div class="product-card" data-id="arroz-limp" data-name="Limpiador · Arroz" data-price="420">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-arroz.jpg"></div>
+        <div class="product-info">
+          <h4>Limpiador</h4><p class="desc">Arroz · Ilumina el tono de la piel</p>
+          <div class="row"><span class="price">$420 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+      <div class="product-card" data-id="arroz-serum" data-name="Sérum · Arroz" data-price="680">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-arroz.jpg"></div>
+        <div class="product-info">
+          <h4>Sérum</h4><p class="desc">Arroz · Suaviza la textura</p>
+          <div class="row"><span class="price">$680 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+      <div class="product-card" data-id="arroz-gel" data-name="Gel hidratante · Arroz" data-price="590">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-arroz.jpg"></div>
+        <div class="product-info">
+          <h4>Gel hidratante</h4><p class="desc">Arroz · Hidratación ligera</p>
+          <div class="row"><span class="price">$590 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-grid" id="grid-te">
+      <div class="product-card" data-id="te-limp" data-name="Limpiador · Té verde" data-price="420">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-te-verde.jpg"></div>
+        <div class="product-info">
+          <h4>Limpiador</h4><p class="desc">Té verde · Controla el sebo</p>
+          <div class="row"><span class="price">$420 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+      <div class="product-card" data-id="te-serum" data-name="Sérum · Té verde" data-price="680">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-te-verde.jpg"></div>
+        <div class="product-info">
+          <h4>Sérum</h4><p class="desc">Té verde · Antioxidante</p>
+          <div class="row"><span class="price">$680 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+      <div class="product-card" data-id="te-gel" data-name="Gel hidratante · Té verde" data-price="590">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-te-verde.jpg"></div>
+        <div class="product-info">
+          <h4>Gel hidratante</h4><p class="desc">Té verde · Piel mixta</p>
+          <div class="row"><span class="price">$590 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-grid" id="grid-art">
+      <div class="product-card" data-id="art-limp" data-name="Limpiador · Artemisa" data-price="420">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-artemisa.jpg"></div>
+        <div class="product-info">
+          <h4>Limpiador</h4><p class="desc">Artemisa · Calma la piel</p>
+          <div class="row"><span class="price">$420 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+      <div class="product-card" data-id="art-serum" data-name="Sérum · Artemisa" data-price="680">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-artemisa.jpg"></div>
+        <div class="product-info">
+          <h4>Sérum</h4><p class="desc">Artemisa · Piel sensible</p>
+          <div class="row"><span class="price">$680 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+      <div class="product-card" data-id="art-gel" data-name="Gel hidratante · Artemisa" data-price="590">
+        <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-artemisa.jpg"></div>
+        <div class="product-info">
+          <h4>Gel hidratante</h4><p class="desc">Artemisa · Repara la barrera</p>
+          <div class="row"><span class="price">$590 MXN</span><button class="add-btn" onclick="addToCart(this)">Agregar</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENT STORY -->
+<section class="story" id="historia">
+  <div class="container story-grid">
+    <div>
+      <span class="kicker" style="font-family:'PT Serif',serif;font-style:italic;color:var(--art2);font-size:15px;display:block;margin-bottom:10px;">Ingredientes</span>
+      <h2>Tres plantas. Tres gestos.</h2>
+      <p>No creemos en rutinas de diez pasos. Cada línea Baekja se construye alrededor de un solo ingrediente, elegido por lo que tu piel necesita hoy.</p>
+      <div class="ing-list">
+        <div class="ing-item">
+          <div class="ing-dot" style="background:var(--rice2);"></div>
+          <div><h4>Arroz · Oryza Sativa</h4><p>Ilumina el tono y suaviza la textura. Ideal para pieles con manchas o tono apagado.</p></div>
+        </div>
+        <div class="ing-item">
+          <div class="ing-dot" style="background:var(--tea2);"></div>
+          <div><h4>Té verde · Camellia Sinensis</h4><p>Controla el sebo y aporta antioxidantes. Ideal para pieles mixtas o con imperfecciones.</p></div>
+        </div>
+        <div class="ing-item">
+          <div class="ing-dot" style="background:var(--art2);"></div>
+          <div><h4>Artemisa · Artemisia</h4><p>Alivia la picazón y purifica. Ideal para pieles sensibles, con rosácea o deshidratación.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="story-img"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/revista.jpg"></div>
+  </div>
+</section>
+
+<!-- TEXTURE BANNER -->
+<section class="texture-banner">
+  <img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/textura.jpg">
+  <div class="caption">Un gesto de cuidado en cada textura.</div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community" id="comunidad">
+  <div class="container">
+    <div class="community-head">
+      <h3>백자 + YOU</h3>
+      <span>Síguenos</span>
+    </div>
+    <div class="community-grid">
+      <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-te-verde.jpg"></div>
+      <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-artemisa.jpg"></div>
+      <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/revista.jpg"></div>
+      <div class="img-wrap"><img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-arroz.jpg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="cta">
+  <div class="container">
+    <h2>Únete al ritual.</h2>
+    <p>Recibe notas sobre cuidado consciente de la piel y entérate primero de cada nuevo lanzamiento.</p>
+    <form class="cta-form" onsubmit="return false;">
+      <input type="email" placeholder="Tu correo electrónico" required>
+      <button type="submit">Unirme</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="hangul">백자</div>
+  <p>© Baekja — Proyecto de portafolio</p>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Tu carrito</h3>
+    <button class="drawer-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems">
+    <p class="drawer-empty">Tu carrito está vacío.</p>
+  </div>
+  <div class="drawer-foot">
+    <div class="subtotal"><span>Subtotal</span><span id="subtotal">$0 MXN</span></div>
+    <button class="checkout-btn">Ir a pagar</button>
+  </div>
+</div>
+
+<script>
+  const imgSources = {
+    'arroz-limp':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-arroz.jpg',
+    'arroz-serum':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-arroz.jpg',
+    'arroz-gel':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-arroz.jpg',
+    'te-limp':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-te-verde.jpg',
+    'te-serum':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-te-verde.jpg',
+    'te-gel':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-te-verde.jpg',
+    'art-limp':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/limpiador-artemisa.jpg',
+    'art-serum':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/serum-artemisa.jpg',
+    'art-gel':'https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/gel-artemisa.jpg',
+  };
+
+  let cart = {};
+
+  function showTab(key, btn){
+    document.querySelectorAll('.product-grid').forEach(g=>g.classList.remove('active'));
+    document.getElementById('grid-'+key).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function addToCart(btn){
+    const card = btn.closest('.product-card');
+    const id = card.dataset.id;
+    const name = card.dataset.name;
+    const price = parseInt(card.dataset.price);
+    if(cart[id]){ cart[id].qty += 1; } else { cart[id] = {name, price, qty:1}; }
+    renderCart();
+    btn.textContent = 'Agregado';
+    btn.classList.add('added');
+    setTimeout(()=>{ btn.textContent='Agregar'; btn.classList.remove('added'); }, 1200);
+    openCart();
+  }
+
+  function changeQty(id, delta){
+    if(!cart[id]) return;
+    cart[id].qty += delta;
+    if(cart[id].qty <= 0) delete cart[id];
+    renderCart();
+  }
+
+  function removeItem(id){
+    delete cart[id];
+    renderCart();
+  }
+
+  function renderCart(){
+    const container = document.getElementById('drawerItems');
+    const ids = Object.keys(cart);
+    let count = 0, subtotal = 0;
+    if(ids.length === 0){
+      container.innerHTML = '<p class="drawer-empty">Tu carrito está vacío.</p>';
+    } else {
+      container.innerHTML = ids.map(id => {
+        const item = cart[id];
+        count += item.qty;
+        subtotal += item.qty * item.price;
+        return `<div class="cart-item">
+          <img src="${imgSources[id]}">
+          <div class="cart-item-info">
+            <h5>${item.name}</h5>
+            <div class="qty-controls">
+              <button onclick="changeQty('${id}',-1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty('${id}',1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem('${id}')">Quitar</button>
+          </div>
+          <div class="cart-item-price">$${item.qty*item.price}</div>
+        </div>`;
+      }).join('');
+    }
+    ids.forEach(id => subtotal += 0); // no-op safeguard
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('subtotal').textContent = '$'+subtotal+' MXN';
+  }
+
+  function toggleMobileNav(){
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+  function closeMobileNav(){
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+
+  function openCart(){
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+  }
+  function closeCart(){
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+</script>
+
+</body>
+</html>
