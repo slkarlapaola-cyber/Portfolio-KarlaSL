@@ -148,10 +148,24 @@
 
   /* NEWSLETTER CTA */
   .cta{
-    background-image:url('https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/images/patron-fondo.jpg');
-    background-size:cover;background-position:center;
-    color:var(--neutral);text-align:center;
-  }
+  position:relative;
+  overflow:hidden;
+  color:var(--neutral);
+  text-align:center;
+}
+.cta-bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  z-index:0;
+}
+.cta .container{
+  position:relative;
+  z-index:1;
+}
   .cta h2{color:var(--neutral);font-size:30px;margin-bottom:14px;font-style:italic;}
   .cta p{color:var(--neutral);font-size:14.5px;opacity:0.85;max-width:400px;margin:0 auto 30px;}
   .cta-form{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
@@ -406,6 +420,7 @@
 
 <!-- NEWSLETTER -->
 <section class="cta">
+  <img src="patron.png" class="cta-bg" alt="">
   <div class="container">
     <h2>Únete al ritual.</h2>
     <p>Recibe notas sobre cuidado consciente de la piel y entérate primero de cada nuevo lanzamiento.</p>
