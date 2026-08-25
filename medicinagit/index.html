@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. David Montoya — Medicina Interna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16324F;
+    --navy-2:#1E3F60;
+    --navy-deep:#0F2438;
+    --blue:#2E6F9E;
+    --sky:#A9C9DC;
+    --cold-bg:#E7EEF4;      /* tomado de Nuvica, reemplaza el blanco cálido */
+    --card-surface:#F3F7FA;  /* tomado de Nuvica */
+    --silver:#C7CED4;
+    --graphite:#333F48;
+    --serif:'Source Serif 4', serif;
+    --sans:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);color:var(--graphite);background:var(--cold-bg);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3{font-family:var(--serif);color:var(--navy);font-weight:700;line-height:1.1;}
+  .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:0.14em;font-size:12px;font-weight:700;color:var(--blue);}
+
+  /* ---------- floating pill navbar ---------- */
+  .nav-float-wrap{position:fixed;top:18px;left:0;right:0;z-index:200;display:flex;justify-content:center;padding:0 16px;}
+  .nav-pill{
+    display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.85);backdrop-filter:blur(14px);
+    border-radius:100px;padding:10px 30px;box-shadow:0 12px 32px -8px rgba(15,36,56,0.25);
+    border:1px solid rgba(255,255,255,0.6);max-width:920px;width:100%;justify-content:space-between;
+  }
+  .nav-pill .brand{display:flex;align-items:center;gap:9px;}
+  .nav-pill .brand img{height:30px;}
+  .nav-pill .brand-text{font-family:var(--serif);font-weight:700;font-size:14.5px;color:var(--navy);}
+  .nav-links{display:flex;gap:24px;align-items:center;}
+  .nav-links a:not(.btn){font-size:13.5px;font-weight:600;color:var(--graphite);}
+  .nav-links a:not(.btn):hover{color:var(--blue);}
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:12px 22px;border-radius:100px;font-size:13.5px;font-weight:700;transition:all .2s;cursor:pointer;border:none;white-space:nowrap;}
+  .btn-primary{background:var(--navy);color:#fff;box-shadow:0 8px 20px -6px rgba(22,50,79,0.5);}
+  .btn-primary:hover{background:var(--navy-2);transform:translateY(-1px);}
+  .btn-wa{background:#25D366;color:#fff;box-shadow:0 8px 20px -6px rgba(37,211,102,0.5);}
+  .btn-wa:hover{background:#1FB855;transform:translateY(-1px);}
+  .btn-outline{background:transparent;color:var(--navy);border:1.5px solid rgba(22,50,79,0.3);}
+  .btn-outline:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px;}
+  .menu-toggle span{display:block;width:22px;height:2px;background:var(--navy);margin:5px 0;}
+
+  /* ---------- HERO — Pharma-Genesis style ---------- */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 55%, var(--navy-2) 100%);padding:130px 0 0;margin:0 16px;border-radius:0 0 32px 32px;}
+  .hero-noise{position:absolute;inset:0;opacity:0.4;background-image:radial-gradient(circle at 20% 20%, rgba(169,201,220,0.12), transparent 45%), radial-gradient(circle at 85% 15%, rgba(46,111,158,0.25), transparent 40%);}
+
+  .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 0.95fr;gap:20px;align-items:flex-start;padding-bottom:0;}
+  .hero-text{padding-bottom:56px;}
+
+  .hero-text h1{color:#fff;font-size:30px;letter-spacing:0.01em;margin-bottom:4px;font-weight:500;font-family:var(--sans);opacity:0.85;}
+  .hero-name{font-family:var(--serif);color:#fff;font-size:46px;font-weight:700;line-height:1.05;letter-spacing:-0.01em;margin-bottom:20px;}
+  .hero-name span{display:block;}
+  .hero-text p.lead{color:#fff;font-size:15.5px;max-width:42ch;opacity:0.92;margin-bottom:32px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px;}
+  .hero-note{color:#fff;opacity:0.8;font-size:12.5px;margin-bottom:40px;}
+  .hero-icon-row{display:flex;gap:28px;flex-wrap:wrap;border-top:1px solid rgba(169,201,220,0.18);padding-top:24px;}
+  .hero-icon-item{display:flex;align-items:center;gap:10px;}
+  .hero-icon-item .ic{width:34px;height:34px;border-radius:9px;background:rgba(169,201,220,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .hero-icon-item span{font-size:11.5px;color:var(--sky);font-weight:600;letter-spacing:0.02em;}
+
+  .hero-visual{position:relative;height:520px;display:flex;align-items:flex-end;justify-content:center;}
+  .hero-glow{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle, rgba(169,201,220,0.35) 0%, rgba(46,111,158,0.18) 45%, transparent 72%);top:8%;left:50%;transform:translateX(-50%);filter:blur(6px);}
+  .hero-ring{position:absolute;width:340px;height:340px;border-radius:50%;border:1px solid rgba(169,201,220,0.25);top:14%;left:50%;transform:translateX(-50%);}
+  .hero-ring-2{position:absolute;width:400px;height:400px;border-radius:50%;border:1px dashed rgba(169,201,220,0.15);top:9%;left:50%;transform:translateX(-50%);}
+  .hero-doctor{position:relative;height:108%;aspect-ratio:205/444;margin:0 auto;}
+  .hero-doctor img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 30px 40px rgba(0,0,0,0.45));}
+  .hero-anno{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+  .hero-anno .anno-line{stroke:#A9C9DC;stroke-width:0.9;opacity:0.55;fill:none;}
+  .hero-anno .anno-dot{fill:#A9C9DC;opacity:0.85;}
+  .hero-anno .anno-label{font-family:'Inter',sans-serif;font-weight:600;fill:#A9C9DC;opacity:0.8;}
+  .hero-anno .anno-label tspan{fill:#A9C9DC;}
+  .hero-particle{position:absolute;border-radius:50%;background:var(--sky);opacity:0.6;}
+
+  .hero-panel-row{position:relative;z-index:2;border-top:1px solid rgba(169,201,220,0.15);margin-top:20px;padding:26px 0;}
+  .hero-panel-row .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;}
+  .hpr-item{display:flex;align-items:center;gap:10px;color:var(--sky);}
+  .hpr-item .ic{width:30px;height:30px;border-radius:8px;background:rgba(169,201,220,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .hpr-item span{font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}
+
+  /* ---------- differentiators (numbered panels with EKG texture) ---------- */
+  .panels{position:relative;overflow:hidden;padding:90px 0;background:var(--cold-bg);}
+  .panels-head{max-width:640px;margin-bottom:44px;}
+  .panels-head h2{font-size:30px;margin-top:10px;}
+  .panels-head p{color:var(--graphite);opacity:0.8;margin-top:12px;font-size:15px;}
+  .panel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:rgba(22,50,79,0.08);border-radius:16px;overflow:hidden;position:relative;}
+  .panel{background:var(--navy);padding:30px 24px;position:relative;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;}
+  .panel::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='70'%3E%3Cpath d='M0,35 L70,35 L80,35 L88,18 L96,52 L104,35 L114,35 L200,35' fill='none' stroke='%23C7CED4' stroke-width='2.5'/%3E%3C/svg%3E");background-repeat:repeat;opacity:0.07;}
+  .panel > *{position:relative;z-index:1;}
+  .panel h3{color:#fff;font-size:15.5px;margin-bottom:7px;font-family:var(--serif);font-weight:600;}
+  .panel p{color:var(--sky);font-size:12.5px;opacity:0.85;line-height:1.5;}
+  .panel .num{font-family:var(--serif);font-size:30px;color:rgba(169,201,220,0.35);font-weight:700;align-self:flex-end;}
+
+  /* ---------- áreas de especialidad ---------- */
+  .areas{padding:90px 0;background:#fff;}
+  .areas-head{max-width:680px;margin-bottom:44px;}
+  .areas-head h2{font-size:30px;margin-top:10px;}
+  .areas-head p{color:var(--graphite);opacity:0.8;margin-top:12px;font-size:15px;}
+  .areas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:52px 24px;margin-top:50px;}
+  .area-card{
+    background:linear-gradient(180deg, #3D6B93 0%, #234C71 45%, #16324F 100%);
+    border-radius:22px;overflow:visible;position:relative;
+    padding-top:82px;box-shadow:0 20px 40px -18px rgba(22,50,79,0.35);
+  }
+  .area-img-slot{
+    position:absolute;top:-23px;left:50%;transform:translateX(-50%);
+    width:52%;max-width:133px;height:115px;z-index:2;
+    display:flex;align-items:flex-end;justify-content:center;overflow:visible;
+  }
+  .area-img-slot .placeholder{
+    display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--sky);opacity:0.6;
+    border:1.5px dashed rgba(169,201,220,0.45);border-radius:14px;padding:18px 16px;width:100%;height:100%;justify-content:center;
+  }
+  .area-img-slot .placeholder span{font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;text-align:center;}
+  .area-img-slot img{height:100%;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 14px 20px rgba(0,0,0,0.35));}
+  .area-body{padding:14px 24px 28px;position:relative;z-index:1;}
+  .area-body h3{color:#fff;font-size:17px;margin-bottom:9px;font-family:var(--serif);font-weight:700;line-height:1.25;}
+  .area-body p{color:var(--sky);font-size:13px;opacity:0.85;line-height:1.6;}
+
+  /* ---------- about ---------- */
+  .about{padding:96px 0;background:var(--cold-bg);}
+  .about-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:60px;align-items:center;}
+  .about-badge{background:var(--navy);border-radius:18px;padding:0;display:flex;align-items:flex-end;justify-content:center;aspect-ratio:1;position:relative;overflow:hidden;box-shadow:0 24px 48px -18px rgba(22,50,79,0.35);}
+  .about-badge-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;}
+  .about-badge-caption{position:relative;z-index:1;width:100%;text-align:center;padding:22px 20px;background:linear-gradient(0deg, rgba(15,36,56,0.92), rgba(15,36,56,0.05));}
+  .about-badge-caption b{display:block;font-family:var(--serif);color:#fff;font-size:18px;}
+  .about-badge-caption span{font-size:12px;color:var(--sky);margin-top:4px;}
+  .about-copy p{margin-bottom:15px;font-size:15px;opacity:0.9;}
+  .cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;}
+  .cred{display:flex;gap:12px;align-items:flex-start;}
+  .cred .ico{width:34px;height:34px;border-radius:9px;background:var(--sky);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .cred b{display:block;font-family:var(--serif);color:var(--navy);font-size:13.5px;}
+  .cred span{font-size:12px;opacity:0.7;}
+
+  /* ---------- process ---------- */
+  .process{padding:90px 0;background:#fff;}
+  .process-head{max-width:640px;margin-bottom:44px;}
+  .process-head h2{font-size:30px;margin-top:10px;}
+  .process-head p{margin-top:12px;font-size:15px;opacity:0.8;}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+  .steps::before{content:'';position:absolute;top:18px;left:5%;right:5%;height:1px;background:repeating-linear-gradient(90deg, var(--sky) 0 8px, transparent 8px 16px);}
+  .step{position:relative;padding-right:16px;}
+  .step-num{font-family:var(--serif);font-size:14px;color:#fff;background:var(--navy);width:37px;height:37px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-weight:700;position:relative;z-index:1;}
+  .step h3{font-size:15px;margin-bottom:7px;}
+  .step p{font-size:12.5px;opacity:0.8;}
+
+  /* ---------- consultorio ---------- */
+  .office{padding:90px 0;background:#fff;}
+  .office-head{margin-bottom:36px;max-width:640px;}
+  .office-head h2{font-size:30px;margin-top:10px;}
+  .office-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .office-img{border-radius:16px;overflow:hidden;position:relative;height:320px;box-shadow:0 20px 40px -16px rgba(22,50,79,0.25);}
+  .office-img img{width:100%;height:100%;object-fit:cover;}
+  .office-img .cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg, rgba(15,36,56,0.85), transparent);padding:16px;color:#fff;font-size:12.5px;font-weight:600;}
+  .office-info{background:#fff;border-radius:16px;padding:30px;margin-top:20px;box-shadow:0 12px 30px -14px rgba(22,50,79,0.15);}
+  .office-list{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .office-list-item{display:flex;gap:12px;align-items:flex-start;}
+  .office-list-item .icon{width:34px;height:34px;border-radius:9px;background:var(--sky);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .office-list-item b{display:block;font-family:var(--serif);color:var(--navy);font-size:13.5px;}
+  .office-list-item span{font-size:12px;color:var(--graphite);opacity:0.75;}
+
+  /* ---------- whatsapp CTA final ---------- */
+  .cta-final{position:relative;overflow:hidden;background:linear-gradient(160deg, var(--navy-deep), var(--navy));border-radius:28px;margin:0 16px 16px;padding:70px 40px;text-align:center;}
+  .cta-final::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%, rgba(169,201,220,0.2), transparent 60%);}
+  .cta-final *{position:relative;z-index:1;}
+  .cta-final .eyebrow{color:var(--sky);}
+  .cta-final h2{color:#fff;font-size:30px;margin:12px 0 14px;}
+  .cta-final p{color:var(--sky);opacity:0.9;max-width:46ch;margin:0 auto 30px;font-size:15px;}
+  .cta-final-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;}
+  .cta-final-note{color:var(--sky);opacity:0.65;font-size:12.5px;}
+
+  .secondary-toggle{
+    display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;
+    color:var(--sky);opacity:0.85;font-size:12.5px;font-weight:600;text-decoration:underline;
+    text-underline-offset:3px;margin-top:18px;font-family:var(--sans);
+  }
+  .secondary-toggle:hover{opacity:1;}
+  .secondary-form{
+    max-width:420px;margin:16px auto 0;display:none;flex-direction:column;gap:10px;
+    background:rgba(255,255,255,0.04);border:1px solid rgba(169,201,220,0.2);
+    border-radius:14px;padding:20px;
+  }
+  .secondary-form.open{display:flex;}
+  .secondary-form .sf-row{display:flex;gap:10px;}
+  .secondary-form input{
+    flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(169,201,220,0.25);
+    border-radius:8px;padding:10px 12px;font-family:var(--sans);font-size:13px;color:#fff;
+    outline:none;
+  }
+  .secondary-form input::placeholder{color:var(--sky);opacity:0.6;}
+  .secondary-form input:focus{border-color:var(--sky);}
+  .sf-submit{background:transparent;color:var(--sky);border:1.5px solid rgba(169,201,220,0.5);width:100%;justify-content:center;font-size:13px;padding:10px;}
+  .sf-submit:hover{background:rgba(169,201,220,0.12);color:#fff;border-color:var(--sky);}
+  .cta-contact-row{display:flex;gap:36px;justify-content:center;flex-wrap:wrap;margin-top:34px;padding-top:28px;border-top:1px solid rgba(169,201,220,0.18);}
+  .cta-contact-row .channel{display:flex;align-items:center;gap:10px;color:var(--sky);font-size:13.5px;font-weight:600;}
+  .cta-contact-row .channel .ic{width:32px;height:32px;border-radius:50%;background:rgba(169,201,220,0.15);display:flex;align-items:center;justify-content:center;}
+
+  /* ---------- footer ---------- */
+  footer{padding:36px 0 26px;}
+  .footer-grid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .footer-brand{display:flex;align-items:center;gap:10px;}
+  .footer-brand img{height:26px;}
+  .footer-brand-text{font-family:var(--serif);color:var(--navy);font-size:13.5px;font-weight:700;}
+  .footer-bottom{font-size:11.5px;color:var(--graphite);opacity:0.6;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .menu-toggle{display:block;}
+    .nav-links{position:fixed;top:74px;left:16px;right:16px;background:#fff;flex-direction:column;align-items:flex-start;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease;border-radius:18px;box-shadow:0 16px 40px -12px rgba(15,36,56,0.3);}
+    .nav-links.open{max-height:400px;padding:8px 0;}
+    .nav-links a{width:100%;padding:13px 20px;}
+    .nav-links .btn{margin:8px 20px;}
+    .hero{margin:0 8px;border-radius:0 0 24px 24px;padding-top:110px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-name{font-size:42px;}
+    .hero-visual{height:320px;order:-1;margin-bottom:10px;}
+    .hero-doctor{height:96%;}
+    .hero-glow{width:280px;height:280px;}
+    .hero-ring,.hero-ring-2{width:240px;height:240px;}
+    .hero-icon-row{gap:16px 22px;}
+    .hero-panel-row .wrap{gap:14px;}
+    .panel-grid{grid-template-columns:1fr 1fr;}
+    .areas-grid{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr;gap:36px;}
+    .about-badge{aspect-ratio:auto;padding:30px;}
+    .office-grid{grid-template-columns:1fr;}
+    .office-list{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr 1fr;row-gap:28px;}
+    .steps::before{display:none;}
+    .cta-final{margin:0 8px 12px;padding:50px 24px;}
+    .secondary-form .sf-row{flex-direction:column;}
+    .cta-contact-row{flex-direction:column;align-items:center;gap:16px;}
+  }
+  @media (max-width:560px){
+    .panel-grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .hero-name{font-size:34px;}
+    .nav-pill .brand-text{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){ * {transition:none !important;} }
+</style>
+</head>
+<body>
+
+<div class="nav-float-wrap">
+  <div class="nav-pill">
+    <a href="#inicio" class="brand">
+      <img src="logomontoya.png" alt="Montoya">
+      <span class="brand-text">Dr. David Montoya</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#inicio">Inicio</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#areas">Áreas</a>
+      <a href="#consultorio">Consultorio</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  </div>
+</div>
+
+<section class="hero" id="inicio">
+  <div class="hero-noise"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow" style="color:var(--sky);margin-bottom:14px;">Medicina interna</p>
+        <div class="hero-name"><span>Dr. David Montoya</span></div>
+        <p class="lead">Medicina interna para adultos — un diagnóstico certero empieza con escuchar de verdad, con la actualidad clínica y la calidez que tu salud merece.</p>
+        <div class="hero-ctas">
+          <a href="https://wa.me/524621953310" target="_blank" rel="noopener" class="btn btn-wa">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.02.08-1.65-.1-.38-.11-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.98-.13-.18-1.08-1.44-1.08-2.75s.68-1.94.92-2.2c.24-.26.53-.33.7-.33h.5c.16 0 .38-.06.6.45.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.13.29-.26.45-.13.15-.27.34-.39.46-.13.13-.26.27-.11.53.15.26.68 1.13 1.47 1.83 1.01.9 1.86 1.18 2.12 1.31.26.13.41.11.56-.07.15-.18.64-.75.81-1.01.17-.26.34-.22.57-.13.24.09 1.5.71 1.76.84.26.13.43.2.5.31.06.11.06.64-.16 1.26z"/></svg>
+            Agendar por WhatsApp
+          </a>
+        </div>
+        <p class="hero-note">También puedes agendar tu cita directamente en el recibidor del consultorio.</p>
+        <div class="hero-icon-row">
+          <div class="hero-icon-item"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A9C9DC" stroke-width="2.3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span>12+ años de experiencia</span></div>
+          <div class="hero-icon-item"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A9C9DC" stroke-width="2.3"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><span>Valoración integral</span></div>
+          <div class="hero-icon-item"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A9C9DC" stroke-width="2.3"><path d="M9 11l3 3 8-8M21 12a9 9 0 1 1-6.219-8.56"/></svg></div><span>Certificación vigente</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-glow"></div>
+        <div class="hero-ring-2"></div>
+        <div class="hero-ring"></div>
+        <div class="hero-particle" style="width:8px;height:8px;top:12%;left:18%;"></div>
+        <div class="hero-particle" style="width:5px;height:5px;top:30%;left:82%;"></div>
+        <div class="hero-particle" style="width:6px;height:6px;top:70%;left:12%;"></div>
+        <div class="hero-particle" style="width:4px;height:4px;top:60%;left:88%;"></div>
+        <div class="hero-doctor">
+          <img src="cuerpo.png" alt="CuerpoHumano">
+          <svg class="hero-anno" viewBox="0 0 205 444" xmlns="http://www.w3.org/2000/svg">
+            <circle class="anno-dot" cx="103" cy="54" r="2"/>
+            <path class="anno-line" d="M103,54 L60,49 L14,49"/>
+            <text class="anno-label" x="12" y="52" font-size="8.5" text-anchor="end">Metab&#243;lico y endocrino</text>
+
+            <circle class="anno-dot" cx="123" cy="112" r="2"/>
+            <path class="anno-line" d="M123,112 L165,105 L196,105"/>
+            <text class="anno-label" x="198" y="108" font-size="8.5" text-anchor="start">Respiratorio</text>
+
+            <circle class="anno-dot" cx="90" cy="100" r="2"/>
+            <path class="anno-line" d="M90,100 L45,120 L14,120"/>
+            <text class="anno-label" x="12" y="123" font-size="8.5" text-anchor="end">Cardiovascular</text>
+
+            <circle class="anno-dot" cx="102" cy="182" r="2"/>
+            <path class="anno-line" d="M102,182 L160,177 L196,177"/>
+            <text class="anno-label" x="198" y="180" font-size="8.5" text-anchor="start">Digestivo</text>
+
+            <circle class="anno-dot" cx="98" cy="212" r="2"/>
+            <path class="anno-line" d="M98,212 L50,217 L14,217"/>
+            <text class="anno-label" x="12" y="220" font-size="8.5" text-anchor="end">Funci&#243;n renal</text>
+
+            <circle class="anno-dot" cx="100" cy="336" r="2"/>
+            <path class="anno-line" d="M100,336 L150,326 L196,326"/>
+            <text class="anno-label" x="198" y="322" font-size="8.5" text-anchor="start">
+              <tspan x="198" dy="0">Geri&#225;trico y</tspan>
+              <tspan x="198" dy="10">preventivo</tspan>
+            </text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="areas" id="areas">
+  <div class="wrap">
+    <div class="areas-head">
+      <p class="eyebrow">Áreas que atiendo</p>
+      <h2>La medicina interna cubre mucho más de lo que crees</h2>
+      <p>Como internista, mi formación me permite dar seguimiento a distintos sistemas del cuerpo — no solo tratar un síntoma aislado, sino entender cómo se conectan entre sí.</p>
+    </div>
+    <div class="areas-grid">
+      <div class="area-card">
+        <div class="area-img-slot"><img src="corazon.png" alt="Cardiovascular">
+        <div class="area-body"><h3>Cardiovascular</h3><p>Control de presión arterial, seguimiento de factores de riesgo y salud del corazón.</p></div>
+      </div>
+      <div class="area-card">
+        <div class="area-img-slot"><img src="endocrino.png" alt="Endocrino">
+        <div class="area-body"><h3>Metabólico y endocrino</h3><p>Diabetes, tiroides, colesterol y otros desequilibrios que afectan tu energía diaria.</p></div>
+      </div>
+      <div class="area-card">
+        <div class="area-img-slot"><img src="respiratorio.png" alt="Respiratorio">
+        <div class="area-body"><h3>Respiratorio</h3><p>Asma, bronquitis y padecimientos respiratorios recurrentes, con seguimiento continuo.</p></div>
+      </div>
+      <div class="area-card">
+        <div class="area-img-slot"><img src="estomago2.png" alt="Digestivo">
+        <div class="area-body"><h3>Digestivo</h3><p>Gastritis, colon irritable y salud digestiva desde una mirada integral.</p></div>
+      </div>
+      <div class="area-card">
+        <div class="area-img-slot"><img src="riñones.png" alt="Renal">
+        <div class="area-body"><h3>Función renal</h3><p>Seguimiento de la salud de tus riñones y equilibrio de electrolitos.</p></div>
+      </div>
+      <div class="area-card">
+        <div class="area-img-slot"><img src="geriatrico2.png" alt="Geriátrico">
+        <div class="area-body"><h3>Geriátrico y preventivo</h3><p>Chequeos y prevención pensados para acompañarte en cada etapa de la vida adulta.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="sobre-mi">
+  <div class="wrap about-grid">
+    <div class="about-badge">
+      <img src="doctor.jpeg" alt="Doctor">
+      <div class="about-badge-caption"><b>Dr. David Montoya</b><span>Médico internista</span></div>
+    </div>
+    <div class="about-copy">
+      <p class="eyebrow">Sobre mí</p>
+      <h2 style="font-size:28px;margin:10px 0 16px;">Medicina interna con un enfoque cercano</h2>
+      <p>Soy médico internista y me dedico a algo que suena simple pero que pocas veces se practica bien: escuchar antes de recetar. La medicina interna me permite ver el panorama completo de tu salud, no solo el síntoma que te trae a consulta.</p>
+      <p>Creo en la actualización constante — la medicina cambia rápido, y mis pacientes merecen un diagnóstico informado por la evidencia más reciente, explicado con el tiempo necesario para resolver sus dudas.</p>
+      <div class="cred-grid">
+        <div class="cred"><div class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2.3"><path d="M9 11l3 3 8-8M21 12a9 9 0 1 1-6.219-8.56"/></svg></div><div><b>Medicina interna</b><span>Certificación vigente</span></div></div>
+        <div class="cred"><div class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2.3"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><div><b>Formación continua</b><span>Actualización clínica</span></div></div>
+        <div class="cred"><div class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2.3"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><b>Trato cercano</b><span>Consultas sin prisa</span></div></div>
+        <div class="cred"><div class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2.3"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><b>Atención integral</b><span>Adultos de todas las edades</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="office" id="consultorio">
+  <div class="wrap">
+    <div class="office-head">
+      <p class="eyebrow">Consultorio</p>
+      <h2>Un espacio pensado para tu tranquilidad</h2>
+    </div>
+    <div class="office-grid">
+      <div class="office-img">
+        <img src="mostrador.jpeg" alt="Mostrador">
+        <div class="cap">Recepción del consultorio</div>
+      </div>
+      <div class="office-img">
+        <img src="anunciopuerta.jpeg" alt="Entrada">
+        <div class="cap">Entrada del consultorio</div>
+      </div>
+    </div>
+    <div class="office-info">
+      <div class="office-list">
+        <div class="office-list-item"><div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><b>Ubicación</b><span>Av. Independencia #245, Consultorio 4B</span></div></div>
+        <div class="office-list-item"><div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><b>Horario</b><span>Lun–vie 9:00–18:00 · Sáb 9:00–13:00</span></div></div>
+        <div class="office-list-item"><div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16324F" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><b>Cita previa</b><span>WhatsApp o en el recibidor</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="contacto">
+  <p class="eyebrow">Contacto</p>
+  <h2>Agenda tu consulta hoy mismo</h2>
+  <p>La forma más rápida de reservar tu cita es por WhatsApp — también puedes hacerlo directamente en el recibidor del consultorio.</p>
+  <div class="cta-final-buttons">
+    <a href="https://wa.me/524621953310" target="_blank" rel="noopener" class="btn btn-wa" style="padding:15px 30px;font-size:14.5px;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.02.08-1.65-.1-.38-.11-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.98-.13-.18-1.08-1.44-1.08-2.75s.68-1.94.92-2.2c.24-.26.53-.33.7-.33h.5c.16 0 .38-.06.6.45.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.13.29-.26.45-.13.15-.27.34-.39.46-.13.13-.26.27-.11.53.15.26.68 1.13 1.47 1.83 1.01.9 1.86 1.18 2.12 1.31.26.13.41.11.56-.07.15-.18.64-.75.81-1.01.17-.26.34-.22.57-.13.24.09 1.5.71 1.76.84.26.13.43.2.5.31.06.11.06.64-.16 1.26z"/></svg>
+      +52 462 195 3310
+    </a>
+  </div>
+  <p class="cta-final-note">Respondemos en horario de consultorio, lunes a sábado.</p>
+
+  <button type="button" class="secondary-toggle" onclick="document.getElementById('secForm').classList.toggle('open'); this.style.display='none';">
+    ¿Prefieres que te contactemos nosotros?
+  </button>
+  <form id="secForm" class="secondary-form" onsubmit="event.preventDefault(); alert('Gracias, recibimos tus datos. Te contactaremos pronto.'); this.reset(); this.classList.remove('open'); document.querySelector('.secondary-toggle').style.display='inline-flex';">
+    <div class="sf-row">
+      <input type="text" placeholder="Nombre" required>
+      <input type="tel" placeholder="Teléfono" required>
+    </div>
+    <input type="text" placeholder="Motivo de consulta (opcional)">
+    <button type="submit" class="btn btn-outline sf-submit">Enviar datos</button>
+  </form>
+
+  <div class="cta-contact-row">
+    <div class="channel"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A9C9DC" stroke-width="2"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg></div>contacto@drdavidmontoya.com</div>
+    <div class="channel"><div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A9C9DC" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></div>@dr.davidmontoya</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <img src="logomontoya.png" alt="Logo">
+      <span class="footer-brand-text">Dr. David Montoya — Medicina interna</span>
+    </div>
+    <span class="footer-bottom">Proyecto para portafolio</span>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+
+</body>
+</html>
